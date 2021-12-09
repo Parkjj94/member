@@ -6,44 +6,54 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 </head>
 <body>
-<div id="container">
+    <div id="container">
+        {% if ssid == null %}   <!-- 세션이 없다면 즉, 로그인하지 않았다면 -->
+        <script>
+            alert('먼저 로그인해주세요');
+            location.href = '/login/';  //경로이동 객체(location.href)
+        </script>
+        {% endif %}
         {% include 'navbar.html' %}
         <section>
-        <h1>회원 정보</h1>
-            <table class="tbl_view">
-                <colgroup>
-                    <col style="background-color: #eee">
-                    <col>
-                </colgroup>
-                {% if rs %}
-                <tr>
-                    <td>아이디</td>
-                    <td><input type="text" name="mid" value="{{ rs[0] }}"></td>
-                </tr>
-                <tr>
-                    <td>패스워드</td>
-                    <td><input type="text" name="passwd" value="{{ rs[1] }}"></td>
-                </tr>
-                <tr>
-                    <td>이름</td>
-                    <td><input type="text" name="name" value="{{ rs[2] }}"></td>
-                </tr>
-                <tr>
-                    <td>나이</td>
-                    <td><input type="text" name="passwd" value="{{ rs[3] }}"></td>
-                </tr>
-                <tr>
-                    <td>가입일</td>
-                    <td><input type="text" name="regDate" value="{{ rs[4] }}"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="background-color: #fff">
-                        <a href="{{ url_for('memberlist')}}">목록</a></td>
-                </tr>
-                {% endif %}
-
-
-            </table>
+            <h1>회원 정보</h1>
+                <table class="tbl_view">
+                    <colgroup>
+                        <col style="background-color: #eee">
+                        <col>
+                    </colgroup>
+                    {% if rs %}
+                    <tr>
+                        <td>아이디</td>
+                        <td><input type="text" name="mid" value="{{ rs[0] }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>패스워드</td>
+                        <td><input type="text" name="passwd" value="{{ rs[1] }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>이름</td>
+                        <td><input type="text" name="name" value="{{ rs[2] }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>나이</td>
+                        <td><input type="text" name="passwd" value="{{ rs[3] }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>가입일</td>
+                        <td><input type="text" name="regDate" value="{{ rs[4] }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background-color: #fff">
+                            <a href="{{ url_for('memberlist')}}">목록</a>
+                            {% if ssid == rs[0] %}
+                            <a href="{{ url_for('member_edit', id=rs[0])}}">수정</a>
+                            <a onclick="return confirm('정말로 삭제하시겠습니까?')"
+                               href="{{ url_for('member_del', id=rs[0])}}">삭제</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
         </section>
     </div>
 
