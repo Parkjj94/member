@@ -76,7 +76,7 @@ def login():
         cur = conn.cursor()
         sql = "SELECT * FROM member WHERE mid = '%s' AND passwd = '%s' " % (id, pwd)
         cur.execute(sql)
-        rs = cur.fetchone() # db에서 찾은 데이터 가져옴
+        rs = cur.fetchone()  # db에서 찾은 데이터 가져옴
         conn.close()
         if rs:
             session['userID'] = id   # 세션 발급
@@ -129,7 +129,6 @@ def member_edit(id):
         cur.execute(sql)
         rs = cur.fetchone()
         conn.close()
-
         if 'userID' in session:
             ssid = session.get('userID')
             return render_template('member_edit.html', rs=rs, ssid=ssid)
