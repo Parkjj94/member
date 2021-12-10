@@ -52,16 +52,23 @@ def register():
         pwd = request.form['passwd']
         name = request.form['name']
         age = request.form['age']
-        date = request.form['regDate']
-
+        # date = request.form['regDate']
+        # 회원 가입
         conn = getconn()
         cur = conn.cursor()
-        sql = "INSERT INTO member VALUES ('%s', '%s', '%s', '%s', '%s') " \
-              % (id, pwd, name, age, date)
+        sql = "INSERT INTO member (mid, passwd, name, age) VALUES ('%s', '%s', '%s', '%s') " \
+              % (id, pwd, name, age)
         cur.execute(sql)
         conn.commit()
+        # member(테이블) 우측에 항상 명시하는 습관 들이기 (모든 항목 중에 하나라도 빠지면 오류날수도있음)
+        # 가입 후에 자동 로그인
+        sql = "SELECT * FROM member WHERE mid = '%s' " % (id)
+        cur.execute(sql)
+        rs = cur.fetchone()
         conn.close()
-        return redirect(url_for('memberlist'))  #url 경로로 이동
+        if rs:
+            session['userID'] = id      # 자동 로그인시 세션 발급 필수
+            return redirect(url_for('memberlist'))  #url 경로로 이동
     else:
         return render_template('register.html')     # GET 방식
 
@@ -90,7 +97,8 @@ def login():
 
 @app.route("/logout/")
 def logout():
-    session.pop('userID')   # 세션 삭제
+    #session.pop('userID')   # userID 세션 삭제
+    session.clear()          # 전체의 세션 삭제
     return redirect(url_for('index'))
 
 @app.route('/member_del/<string:id>/')   #삭제 url 생성
