@@ -44,9 +44,9 @@ def select_member():
     sql = "SELECT * FROM member"
     cur.execute(sql)
     rs = cur.fetchall()         # db에서 반환된 자료
-    print(rs)
     for i in rs:
-        print(i[0])
+        print(i)
+    print(rs)
     conn.close()
 
 def delete_member():        # 회원 정보 삭제
@@ -60,6 +60,6 @@ def delete_member():        # 회원 정보 삭제
 
 # create_table()
 # drop_tabel()
-insert_member()
-select_member()
+# insert_member()
+# select_member()
 # delete_member()
